@@ -1,0 +1,83 @@
+[{
+    "menucode": "3001",
+    "menuname": "楼盘字典",
+    "menustate": "1",
+    "menuico": "",
+    "menurouter": "",
+    "menutype": 1,
+    "submenulist": [{
+        "submenucode": "3010",
+        "submenuname": "项目信息",
+        "submenustate": "1",
+        "submenuico": "",
+        "submenurouter": "../index/projectinfo"
+    }, {
+        "submenucode": "3020",
+        "submenuname": "总平图设置",
+        "submenustate": "1",
+        "submenuico": "",
+        "submenurouter": "../index/generalLayout"
+    }, {
+
+        "submenucode": "3030",
+        "submenuname": "项目图片",
+        "submenustate": "1",
+        "submenuico": "",
+        "submenurouter": "../index/projectImg"
+    }, {
+        "submenucode": "3040",
+        "submenuname": "户型信息",
+        "submenustate": "1",
+        "submenuico": "",
+        "submenurouter": "../index/apartmentInfo"
+    }, {
+        "submenucode": "3050",
+        "submenuname": "项目分析",
+        "submenustate": "1",
+        "submenuico": "",
+        "submenurouter": "../index/proAnaly"
+    }, {
+        "submenucode": "3060",
+        "submenuname": "动态列表",
+        "submenustate": "1",
+        "submenuico": "",
+        "submenurouter": "../index/dynamicList"
+    }, {
+        "submenucode": "3060",
+        "submenuname": "一体机设置",
+        "submenustate": "1",
+        "submenuico": "",
+        "submenurouter":"../index/AIOSetting"
+    }]
+}, {
+    "menucode": "4001",
+    "menuname": "结佣规则",
+    "menustate": "1",
+    "menuico": "",
+    "menurouter": "../index/CommissioCheck",
+    "menutype": 2
+}, 
+{
+    "menucode": "5001",
+    "menuname": "佣金管理",
+    "menustate": "1",
+    "menuico": "",
+    "menurouter": "../index/CompanyCommission",
+    "menutype": 2
+},
+{
+    "menucode": "6001",
+    "menuname": "客户管理",
+    "menustate": "1",
+    "menuico": "",
+    "menurouter": "../index/allCustomer",
+    "menutype": 2
+}, {
+    "menucode": "7001",
+    "menuname": "经纪人管理",
+    "menustate": "1",
+    "menuico": "",
+    "menurouter": "../index/ToBeComfirmed",
+    "menutype": 2
+}
+]
