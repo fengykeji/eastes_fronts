@@ -95,6 +95,13 @@ import SetPersonRule from '@/components/rulemaid/SetPersonRule'
 import AIOLogin from '../components/AllInOneManagement/AIOLogin.vue'
 import AIOSetting from '../components/AllInOneManagement/AIOSetting.vue'
 import AddNav from '../components/AllInOneManagement/AddNav.vue'
+import ModifyNav from '../components/AllInOneManagement/ModifyNav.vue'
+import AIOEditSecondary from '../components/AllInOneManagement/AIOEditSecondary.vue'
+import AddNavTwo from '../components/AllInOneManagement/AddNavTwo.vue'
+
+import AIOPropertyConsultant from '../components/AllInOneManagement/AIOPropertyConsultant.vue'
+import AddPC from '../components/AllInOneManagement/AddPC.vue'
+import ModifyPC from '../components/AllInOneManagement/ModifyPC.vue'
 
 Vue.use(Router)
 
@@ -404,9 +411,39 @@ export default new Router({
        },
        {
          path:'/index/addNav',
+         name:'addNav',
          component:AddNav
+       },
+       {
+        path:'/index/modifyNav',
+        name:'modifyNav',
+        component:ModifyNav
+       },
+       {
+         path:'/index/editsecondary/:id',
+         name:'editsecondary',
+         component:AIOEditSecondary
+       },
+       {
+         path:'/index/addNavTwo/:id',
+         name:'addnavtwo',
+         component:AddNavTwo
+       },
+       {
+         path:'index/propertyconsultant/:id',
+         name:'propertyconsultant',
+         component:AIOPropertyConsultant
+       },
+       {
+         path:'index/addPC/:id',
+         name:'addpc',
+         component:AddPC
+       },
+       {
+         path:'index/modifyPC',
+         name:'modifypc',
+         component:ModifyPC
        }
-      
     ]
   }
  ]

@@ -1,7 +1,7 @@
 <template>
     <div id="madd">
         <div class="mtitle">
-            <p class="txt">新增</p>
+            <p class="txt">修改</p>
             <el-button type="primary" class="btn" @click="submit">确定</el-button>
             <el-button class="btn" @click="cancel">取消</el-button>
         </div>
@@ -13,7 +13,7 @@
                 <el-form-item label="设置序号">
                     <el-input v-model="form.sort"></el-input>
                 </el-form-item>
-                <el-upload class="avatar-uploader" :action="rooturl + '/user/project/upload'" :show-file-list="false" name="img_url" :http-request="customUpload">
+                <el-upload class="avatar-uploader"  :action="rooturl + 'user/project/upload'" :show-file-list="false" name="img_url" :http-request="customUpload">
                     <img v-if="showUrl" :src="showUrl" class="avatar">
                     <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
@@ -37,13 +37,23 @@ export default {
   data: function() {
     return {
       rooturl:rooturl.rooturl,
+      type:null,
       imageUrl:'',
       showUrl:'',
+      id:'',
       form: {
         name: "",
         sort: ""
       }
     };
+  },
+  created(){
+      this.form.name = this.$route.query.name
+      this.form.sort = parseInt(this.$route.query.sort)
+      this.imageUrl = this.$route.query.img_url ? this.$route.query.img_url :''
+      this.showUrl = this.$route.query.img_url ? this.rooturl + this.$route.query.img_url :''
+      this.id = parseInt(this.$route.query.id)
+      this.type = parseInt(this.$route.query.type)
   },
   methods: {
     submit() {
@@ -54,19 +64,19 @@ export default {
         let data = {
             name:this.form.name,
             sort:this.form.sort,
-            pid:0,
             img_url:this.imageUrl,
-            project_id:1
+            id:this.id
         }
         this.$http({
-            url:this.rooturl+'user/project/addNav',
+            url:this.rooturl+'user/project/editDynatown',
             method: "POST",
             headers: {
               "Content-Type": "application/x-www-form-urlencoded"
             },
             data: qs.stringify(data)
         }).then((res)=>{
-            this.$router.push({name:'AIOSetting'})
+            // this.$router.push({name:'AIOSetting'})
+            this.$router.go(-1)
         },()=>{
             this.$message('网络错误')
         })

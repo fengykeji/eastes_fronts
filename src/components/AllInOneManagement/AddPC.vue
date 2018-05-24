@@ -7,7 +7,7 @@
         </div>
         <div class="content">
             <el-form ref="form" :model="form" label-width="100px" class="left">
-                <el-form-item label="一级栏目名称">
+                <el-form-item label="二级栏目名称">
                     <el-input v-model="form.name"></el-input>
                 </el-form-item>
                 <el-form-item label="设置序号">
@@ -33,7 +33,7 @@ import showImgServer from "../../../static/showImgServer.js";
 import qs from 'qs'
 
 export default {
-  name: "addNav",
+  name: "addPC",
   data: function() {
     return {
       rooturl:rooturl.rooturl,
@@ -51,22 +51,24 @@ export default {
             this.$message('请填写相应数据')
             return 
         }
+        console.log(this.$route.params.id)
         let data = {
+            nav_id:this.$route.params.id,
             name:this.form.name,
             sort:this.form.sort,
-            pid:0,
-            img_url:this.imageUrl,
-            project_id:1
+            // pid:this.$route.params.id,
+            img_url:this.imageUrl
+            // project_id:1
         }
         this.$http({
-            url:this.rooturl+'user/project/addNav',
+            url:this.rooturl+'user/project/AddAioDynatown',
             method: "POST",
             headers: {
               "Content-Type": "application/x-www-form-urlencoded"
             },
             data: qs.stringify(data)
         }).then((res)=>{
-            this.$router.push({name:'AIOSetting'})
+            this.$router.push({name:'editsecondary',params:{id:this.$route.params.id}})
         },()=>{
             this.$message('网络错误')
         })
@@ -85,6 +87,7 @@ export default {
         //   "http://192.168.0.154/hs_agent/public/index.php/user/project/uploadLogo",
         data: fd
       }).then(res => {
+          console.log(res)
           this.imageUrl = res.data.data.img_url
         //   console.log(res)
           this.showUrl = this.rooturl + res.data.data.img_url;

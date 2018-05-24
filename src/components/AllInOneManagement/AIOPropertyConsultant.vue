@@ -7,37 +7,10 @@
       </el-col>
       <el-col :span="8">
         <el-button-group>
-          <!-- <el-button type="primary" size="small" @click="previewVisible = true">查看</el-button> -->
-          <el-button type="primary" size="small" @click="edit">编辑二级菜单</el-button>
-          <el-button type="primary" size="small" @click="addNav">新增</el-button>
-          <!-- <el-button type="primary" size="small" @click="change">修改</el-button> -->
-          <el-button type="primary" size="small" @click="modify">修改</el-button>
+          <el-button type="primary" size="small" @click="addPC">新增</el-button>
+          <el-button type="primary" size="small" @click="modifyPC">修改</el-button>
           <el-button type="primary" size="small" @click="del">删除</el-button>
         </el-button-group>
-      </el-col>
-    </el-row>
-    <el-row class="aupload" type="flex" align="bottom">
-      <el-col :span="12">
-        <img v-if="logoUrl" :src="logoUrl" class="avatar">
-        <!-- <i v-else class="el-icon-plus avatar-uploader-icon"></i> -->
-      </el-col>
-      <el-col :span="12">
-        <el-upload ref="newupload" class="upload-demo" :data="project" :action="imgServer" name="img_url" :show-file-list="false" :http-request="customUploadLogo">
-          <el-button size="small" type="primary">点击上传</el-button>
-          <div slot="tip" class="el-upload__tip tip">只能上传jpg/png文件，且不超过500kb</div>
-        </el-upload>
-      </el-col>
-    </el-row>
-    <el-row class="aupload" type="flex" align="bottom">
-      <el-col :span="12">
-        <img v-if="indexUrl" :src="indexUrl" class="avatar">
-        <!-- <i v-else class="el-icon-plus avatar-uploader-icon"></i> -->
-      </el-col>
-      <el-col :span="12">
-        <el-upload ref="newupload" class="upload-demo" :data="project" :action="indexImg" name="img_url" :show-file-list="false" :http-request="customUploadHome">
-          <el-button size="small" type="primary">点击上传</el-button>
-          <div slot="tip" class="el-upload__tip tip">只能上传jpg/png文件，且不超过500kb</div>
-        </el-upload>
       </el-col>
     </el-row>
     <el-table :data="Data" @selection-change="selsChange" border ref="multipleTable" tooltip-effect="dark" class="apart-table" @select="handleSelected">
@@ -45,14 +18,14 @@
       </el-table-column>
       <el-table-column prop="sort" label="序号" width="50">
       </el-table-column>
-      <el-table-column prop="name" label="一级栏目名称">
+      <el-table-column prop="name" label="姓名">
       </el-table-column>
     </el-table>
 
     <el-pagination background layout="prev, pager, next" :total="tableData.length" :pageSize="pageSize" @current-change="handleCurrentChange" class="Img-page">
     </el-pagination>
     <!-- 查看弹窗 -->
-    <el-dialog title="查看" :visible.sync="previewVisible">
+    <!-- <el-dialog title="查看" :visible.sync="previewVisible">
       <el-form ref="form" :model="ruleFormSee" label-width="100px" size="small" class="dynamicForm">
         <el-form-item label="标题:">
           <el-input placeholder="请输入内容" v-model="ruleFormSee.title">
@@ -81,7 +54,7 @@
         <el-button type="primary" @click="previewVisible = false">预 览</el-button>
         <el-button @click="previewVisible = false">关 闭</el-button>
       </span>
-    </el-dialog>
+    </el-dialog> -->
     <!-- 新增弹窗 -->
 
   </div>
@@ -132,58 +105,18 @@ export default {
     };
   },
   created() {
-    this.getFnav();
-    this.$http
-      .get(this.rooturl + "user/project/getIndexImg?project_id=" + 1)
-      .then(res => {
-        let logo = res.data.data.filter(ele => {
-          return ele.name === "Logo";
-        });
-        if (logo.length) {
-          logo = logo[0].value;
-          this.logoUrl = this.rooturl + logo;
-        }else{
-          this.logoUrl = ''
-        }
-        let index = res.data.data.filter(ele => {
-          return ele.name === "index";
-        });
-        if (index.length) {
-          index = index[0].value;
-          this.indexUrl = this.rooturl + index;
-        }else{
-          this.indexUrl = ''
-        }
-      });
+    this.getSnav();
   },
   methods: {
-    edit(){
-      if (!this.hasItemSelected) {
-        this.$message.error("您还没有选择");
-        return;
-      }
-      let id = this.selectedRow.id
-      if(this.selectedRow.name==="置业顾问"){
-        this.$router.push({name:'propertyconsultant',params:{id}})
-        // return
-      }else{
-        console.log('aaaaaaaaaaaaaaaaa')
-      this.$router.push({name:'editsecondary',params:{id}})
-      }
-
-    },
     del() {
       if (!this.hasItemSelected) {
         this.$message.error("您还没有选择");
         return;
       }
-      if(this.selectedRow.type !== 1 ){
-        this.$message.error("该条目无法被删除");
-        return
-      }
+
       let id = this.selectedRow.id;
       this.$http
-        .get(this.rooturl + "user/project/delNav?id=" + id)
+        .get(this.rooturl + "user/project/delDynatown?id=" + id)
         .then(res => {
           console.log(res);
           this.tableData = this.tableData.filter(ele => {
@@ -198,77 +131,60 @@ export default {
       // console.log('ddddddd')
       // console.log(this.alltablesize)
     },
-    modify() {
+    modifyPC() {
       if (!this.hasItemSelected) {
         this.$message.error("您还没有选择");
         return;
       }
       let id = this.selectedRow.id;
+      // let nav_id = this.selectedRow.nav_id
       let name = this.selectedRow.name;
       let sort = this.selectedRow.sort;
       let img_url = this.selectedRow.img_url;
-      let type = this.selectedRow.type
       this.$router.push({
-        name: "modifyNav",
-        query: { id, name, sort, img_url,type }
+        name: "modifypc",
+        query: { id, name, sort, img_url}
       });
     },
-    customUploadLogo(file) {
-      let fd = new FormData();
-      fd.append("img_url", file.file);
-      fd.append("project_id", 1);
-      this.$http({
-        method: "post",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        url: this.rooturl + "user/project/uploadLogo",
-        // url:
-        //   "http://192.168.0.154/hs_agent/public/index.php/user/project/uploadLogo",
-        data: fd
-      }).then(res => {
-        console.log(res);
-        this.logoUrl = this.rooturl + res.data.data.img_url;
-      });
-    },
-    customUploadHome(file) {
-      let fd = new FormData();
-      fd.append("img_url", file.file);
-      fd.append("project_id", 1);
-      this.$http({
-        method: "post",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        url: this.rooturl + "user/project/uploadIndexImg",
-        data: fd
-      }).then(res => {
-        this.indexUrl = this.rooturl + res.data.data.img_url;
-      });
-    },
-    getFnav() {
-      //   for (let i = 1; i < 100; i++) {
-      //     this.tableData.push({
-      //       key: i,
-      //       dynamicTitle: "活动通知",
-      //       house: "三室两厅两卫",
-      //       contain: "**********",
-      //       releasePeople: "张三",
-      //       releaseDate: "2017/10/10"
-      //     });
-      //   }
+    // customUploadLogo(file) {
+    //   let fd = new FormData();
+    //   fd.append("img_url", file.file);
+    //   fd.append("project_id", 1);
+    //   this.$http({
+    //     method: "post",
+    //     headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    //     url: this.rooturl + "user/project/uploadLogo",
+    //     // url:
+    //     //   "http://192.168.0.154/hs_agent/public/index.php/user/project/uploadLogo",
+    //     data: fd
+    //   }).then(res => {
+    //     console.log(res);
+    //     this.logoUrl = this.rooturl + res.data.data.img_url;
+    //   });
+    // },
+    // customUploadHome(file) {
+    //   let fd = new FormData();
+    //   fd.append("img_url", file.file);
+    //   fd.append("project_id", 1);
+    //   this.$http({
+    //     method: "post",
+    //     headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    //     url: this.rooturl + "user/project/uploadIndexImg",
+    //     data: fd
+    //   }).then(res => {
+    //     this.indexUrl = this.rooturl + res.data.data.img_url;
+    //   });
+    // },
+    getSnav() {
       this.$http
-        .get(this.rooturl + "user/project/getNav?project_id=" + 1)
+        .get(this.rooturl + "user/project/getAioDynatown?nav_id=" + this.$route.params.id)
         .then(res => {
-          // console.log(res.data.data);
+          console.log(res)
           let result = res.data.data;
           for (let i = 0; i < result.length; i++) {
-            // this.tableData.push({
-            //   sort: result[i].sort,
-            //   name: result[i].name
-            // });
             this.tableData.push(result[i]);
           }
           this.page();
-          // console.log(this.alltablesize)
-          // console.log('bbbb')
-          // console.log(this.Data)
         });
     },
     page() {
@@ -309,16 +225,15 @@ export default {
         this.$refs.multipleTable.clearSelection();
         this.selectedRow = {};
         this.hasItemSelected = false;
-        // console.log('aaaaaaaaaaaaaa')
-        // console.log(this.selectedRow)
         return;
       }
       this.selectedRow = row;
       this.hasItemSelected = true;
       this.$refs.multipleTable.clearSelection();
       this.$refs.multipleTable.toggleRowSelection(this.selectedRow);
-      // console.log('bbbbbbbbbbbb')
-      console.log(this.selectedRow)
+        console.log('aaaaaaaaaaaaaa')
+        console.log(this.selectedRow)
+
     },
     // 验证图片格式大小
     // beforeImgUpload(file) {
@@ -333,8 +248,8 @@ export default {
     //   }
     //   return isJPG && isLt2M;
     // },
-    addNav() {
-      this.$router.push({ path: "/index/addNav" });
+    addPC() {
+      this.$router.push({ name: "addpc" ,params:{id:this.$route.params.id}});
     },
     change() {
       let sels = this.sels;
