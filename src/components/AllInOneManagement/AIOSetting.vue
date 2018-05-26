@@ -1,6 +1,6 @@
 
 <template>
-  <div id="dynamicList">
+  <div id="aiosetting">
     <el-row type="flex" justify="space-between" class="dynamicList-title">
       <el-col :span="8">
         <aiologo></aiologo>
@@ -16,32 +16,33 @@
         </el-button-group>
       </el-col>
     </el-row>
-    <el-row class="aupload" type="flex" align="bottom">
-      <el-col :span="12">
+      
+    <el-row class="aupload" type="flex" align="middle">
+      <el-col :span="4">
         <img v-if="logoUrl" :src="logoUrl" class="avatar">
         <!-- <i v-else class="el-icon-plus avatar-uploader-icon"></i> -->
       </el-col>
       <el-col :span="12">
         <el-upload ref="newupload" class="upload-demo" :data="project" :action="imgServer" name="img_url" :show-file-list="false" :http-request="customUploadLogo">
-          <el-button size="small" type="primary">点击上传</el-button>
-          <div slot="tip" class="el-upload__tip tip">只能上传jpg/png文件，且不超过500kb</div>
+          <el-button size="small" type="primary">点击上传LOGO</el-button>
+          <!-- <div slot="tip" class="el-upload__tip tip">只能上传jpg/png文件，且不超过500kb</div> -->
         </el-upload>
       </el-col>
     </el-row>
-    <el-row class="aupload" type="flex" align="bottom">
-      <el-col :span="12">
+    <el-row class="aupload" type="flex" align="middle">
+      <el-col :span="4">
         <img v-if="indexUrl" :src="indexUrl" class="avatar">
         <!-- <i v-else class="el-icon-plus avatar-uploader-icon"></i> -->
       </el-col>
       <el-col :span="12">
         <el-upload ref="newupload" class="upload-demo" :data="project" :action="indexImg" name="img_url" :show-file-list="false" :http-request="customUploadHome">
-          <el-button size="small" type="primary">点击上传</el-button>
-          <div slot="tip" class="el-upload__tip tip">只能上传jpg/png文件，且不超过500kb</div>
+          <el-button size="small" type="primary">点击上传主页图片</el-button>
+          <!-- <div slot="tip" class="el-upload__tip tip">只能上传jpg/png文件，且不超过500kb</div> -->
         </el-upload>
       </el-col>
     </el-row>
-    <el-table :data="Data" @selection-change="selsChange" border ref="multipleTable" tooltip-effect="dark" class="apart-table" @select="handleSelected">
-      <el-table-column type="selection" reserve-selection='' label="ALL" width="50">
+    <el-table :data="Data" @selection-change="selsChange" border ref="multipleTable" tooltip-effect="dark" class="apart-table" @select="handleSelected" :row-class-name="foo">
+      <el-table-column type="selection" reserve-selection='' label="All" width="50">
       </el-table-column>
       <el-table-column prop="sort" label="序号" width="50">
       </el-table-column>
@@ -157,17 +158,32 @@ export default {
       });
   },
   methods: {
+    foo({row,column,rowIndex,columnIndex}){
+      if(row.type !== 1){
+        return 'bd'
+      }
+    },
+    // toHtml(row,column){
+    //   if(row.type === 1){
+    //     return this.$createElement('b',row[column.property])
+    //   }else{
+    //     return row[column.property]
+    //   } 
+    // },
     edit(){
       if (!this.hasItemSelected) {
         this.$message.error("您还没有选择");
         return;
       }
       let id = this.selectedRow.id
-      if(this.selectedRow.name==="置业顾问"){
+      if(this.selectedRow.type===3){
         this.$router.push({name:'propertyconsultant',params:{id}})
         // return
+      }else if(this.selectedRow.type === 4){
+        this.$router.push({name:'housetypeappreciation',params:{navid:id}})
+      }else if(this.selectedRow.type === 2){
+        this.$message.error('抱歉，该条目不允许添加二级菜单')
       }else{
-        console.log('aaaaaaaaaaaaaaaaa')
       this.$router.push({name:'editsecondary',params:{id}})
       }
 
@@ -185,7 +201,10 @@ export default {
       this.$http
         .get(this.rooturl + "user/project/delNav?id=" + id)
         .then(res => {
-          console.log(res);
+          if(res.data.code === 400){
+            this.$message.error(res.data.msg)
+            return
+          }
           this.tableData = this.tableData.filter(ele => {
             return ele.id !== id;
           });
@@ -256,19 +275,11 @@ export default {
       this.$http
         .get(this.rooturl + "user/project/getNav?project_id=" + 1)
         .then(res => {
-          // console.log(res.data.data);
           let result = res.data.data;
           for (let i = 0; i < result.length; i++) {
-            // this.tableData.push({
-            //   sort: result[i].sort,
-            //   name: result[i].name
-            // });
             this.tableData.push(result[i]);
           }
           this.page();
-          // console.log(this.alltablesize)
-          // console.log('bbbb')
-          // console.log(this.Data)
         });
     },
     page() {
@@ -289,7 +300,6 @@ export default {
         }
         this.alltablesize.push(arr);
       }
-      // this.Data = this.alltablesize[0];
       if (this.pageNum > Math.ceil(this.tableData.length / this.pageSize)) {
         this.pageNum = this.pageNum - 1;
       }
@@ -297,7 +307,6 @@ export default {
     },
     handleCurrentChange(val) {
       this.pageNum = val;
-      // console.log(val)
       this.Data = this.alltablesize[val - 1];
     },
     handleSelected(selection, row) {
@@ -309,15 +318,12 @@ export default {
         this.$refs.multipleTable.clearSelection();
         this.selectedRow = {};
         this.hasItemSelected = false;
-        // console.log('aaaaaaaaaaaaaa')
-        // console.log(this.selectedRow)
         return;
       }
       this.selectedRow = row;
       this.hasItemSelected = true;
       this.$refs.multipleTable.clearSelection();
       this.$refs.multipleTable.toggleRowSelection(this.selectedRow);
-      // console.log('bbbbbbbbbbbb')
       console.log(this.selectedRow)
     },
     // 验证图片格式大小
@@ -356,51 +362,52 @@ export default {
   }
 };
 </script>
-<style scoped>
-.el-breadcrumb__inner {
+<style>
+
+#aiosetting .el-breadcrumb__inner {
   font-size: 18px !important;
 }
-.dynamicList-title {
+#aiosetting .dynamicList-title {
   border-bottom: dashed 1px #b3c0d1;
   margin-bottom: 10px;
   padding-bottom: 10px;
 }
-.el-table {
+#aiosetting .el-table {
   margin: 50px auto;
   width: 80%;
 }
-.Img-page {
+#aiosetting .Img-page {
   margin-left: 114px;
 }
-.textImgType {
+#aiosetting .textImgType {
   width: 80%;
   height: 25px;
 }
-.dialogImg img {
+#aiosetting .dialogImg img {
   width: 80px;
 }
-.dynamicForm {
+#aiosetting .dynamicForm {
   width: 80%;
   margin: 50px auto;
 }
-.el-dialog__body {
+#aiosetting .el-dialog__body {
   padding: 0;
 }
-.dynamicTitle {
+#aiosetting .dynamicTitle {
   margin-bottom: 30px;
   font-size: 18px;
   height: 40px;
   line-height: 40px;
   border-bottom: 1px solid #b3c0d1;
 }
-.addTitle {
+#aiosetting .addTitle {
   margin-left: 20px;
 }
-.aupload {
+#aiosetting .aupload {
   width: 80%;
   margin: 0 auto;
 }
-.avatar-uploader-icon {
+#aiosetting .avatar-uploader-icon {
   font-size: 28px;
   color: #8c939d;
   width: 178px;
@@ -408,14 +415,30 @@ export default {
   line-height: 178px;
   text-align: center;
 }
-.avatar {
+#aiosetting .avatar {
   width: 100px;
   height: 100px;
   display: inline-block;
 }
-.upload-demo {
+#aiosetting .upload-demo {
   display: flex;
   align-items: flex-end;
+}
+/* thead.has-gutter:first-child  {
+  display: none
+} */
+/* #aiosetting th.el-table_1_column_1 label.el-checkbox{
+  display: none !important;
+} */
+/* #aiosetting th.el-table_1_column_1 div.cell{
+  display: none !important;
+} */
+#aiosetting .el-table-column--selection.is-leaf:first-child div.cell {
+  display: none;
+  /* border: 1px solid red */
+}
+#aiosetting .bd{
+  font-weight: bold !important
 }
 /* .avatar-uploader .el-upload {
   border: 1px dashed #d9d9d9;
@@ -442,5 +465,10 @@ export default {
 } */
 div.tip {
   display: inline-block;
+}
+.bar{
+  display: flex;
+  justify-content: center;
+  align-items: center
 }
 </style>

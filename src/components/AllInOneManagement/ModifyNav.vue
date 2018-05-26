@@ -13,10 +13,17 @@
                 <el-form-item label="设置序号">
                     <el-input v-model="form.sort"></el-input>
                 </el-form-item>
-                <el-upload class="avatar-uploader" v-if="type === 1" :action="rooturl + 'user/project/upload'" :show-file-list="false" name="img_url" :http-request="customUpload">
-                    <img v-if="showUrl" :src="showUrl" class="avatar">
-                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                </el-upload>
+                <el-row type="flex" align="middle" v-if="type !== 2">
+                    <el-col :span="4" class="text">
+                        <span>添加图片</span>
+                    </el-col>
+                    <el-col :span="20"> 
+                    <el-upload class="avatar-uploader"  :action="rooturl + 'user/project/upload'" :show-file-list="false" name="img_url" :http-request="customUpload">
+                        <img v-if="showUrl" :src="showUrl" class="avatar">
+                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                    </el-upload>
+                    </el-col>
+                </el-row>
             </el-form>
         </div>
         <!-- <form id="formid">
@@ -28,76 +35,81 @@
 </template>
 
 <script>
-import rooturl from '../../../static/Rooturl.js'
+import rooturl from "../../../static/Rooturl.js";
 import showImgServer from "../../../static/showImgServer.js";
-import qs from 'qs'
+import qs from "qs";
 
 export default {
   name: "addNav",
   data: function() {
     return {
-      rooturl:rooturl.rooturl,
-      type:null,
-      imageUrl:'',
-      showUrl:'',
-      id:'',
+      rooturl: rooturl.rooturl,
+      type: null,
+      imageUrl: "",
+      showUrl: "",
+      id: "",
       form: {
         name: "",
         sort: ""
       }
     };
   },
-  created(){
-      this.form.name = this.$route.query.name
-      this.form.sort = parseInt(this.$route.query.sort)
-      this.imageUrl = this.$route.query.img_url ? this.$route.query.img_url :''
-      this.showUrl = this.$route.query.img_url ? this.rooturl + this.$route.query.img_url :''
-      this.id = parseInt(this.$route.query.id)
-      this.type = parseInt(this.$route.query.type)
+  created() {
+    this.form.name = this.$route.query.name;
+    this.form.sort = parseInt(this.$route.query.sort);
+    this.imageUrl = this.$route.query.img_url ? this.$route.query.img_url : "";
+    this.showUrl = this.$route.query.img_url
+      ? this.rooturl + this.$route.query.img_url
+      : "";
+    this.id = parseInt(this.$route.query.id);
+    this.type = parseInt(this.$route.query.type);
   },
   methods: {
     submit() {
-        if(!(this.imageUrl && this.form.name && this.form.sort)){
-            this.$message('请填写相应数据')
-            return 
+      if (!(this.imageUrl && this.form.name && this.form.sort)) {
+        this.$message("请填写相应数据");
+        return;
+      }
+      let data = {
+        name: this.form.name,
+        sort: this.form.sort,
+        img_url: this.imageUrl,
+        id: this.id
+      };
+      this.$http({
+        url: this.rooturl + "user/project/editNav",
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        data: qs.stringify(data)
+      }).then(
+        res => {
+          // this.$router.push({name:'AIOSetting'})
+          this.$router.go(-1);
+        },
+        () => {
+          this.$message("网络错误");
         }
-        let data = {
-            name:this.form.name,
-            sort:this.form.sort,
-            img_url:this.imageUrl,
-            id:this.id
-        }
-        this.$http({
-            url:this.rooturl+'user/project/editNav',
-            method: "POST",
-            headers: {
-              "Content-Type": "application/x-www-form-urlencoded"
-            },
-            data: qs.stringify(data)
-        }).then((res)=>{
-            // this.$router.push({name:'AIOSetting'})
-            this.$router.go(-1)
-        },()=>{
-            this.$message('网络错误')
-        })
+      );
     },
     cancel() {
-        this.$router.go(-1)
+      this.$router.go(-1);
     },
-    customUpload(file){
-        let fd = new FormData();
-        fd.append('img_url',file.file)
-        this.$http({
+    customUpload(file) {
+      let fd = new FormData();
+      fd.append("img_url", file.file);
+      this.$http({
         method: "post",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        url:this.rooturl + 'user/project/upload',
+        url: this.rooturl + "user/project/upload",
         // url:
         //   "http://192.168.0.154/hs_agent/public/index.php/user/project/uploadLogo",
         data: fd
       }).then(res => {
-          this.imageUrl = res.data.data.img_url
+        this.imageUrl = res.data.data.img_url;
         //   console.log(res)
-          this.showUrl = this.rooturl + res.data.data.img_url;
+        this.showUrl = this.rooturl + res.data.data.img_url;
       });
     }
     // upload() {
@@ -157,14 +169,14 @@ export default {
 </script>
 
 <style scoped>
-p{
-    margin: 0;
+p {
+  margin: 0;
 }
 #madd {
   max-width: 600px;
   margin: 0 auto;
   margin-top: 200px;
-  border: 1px solid #dcdcdc
+  border: 1px solid #dcdcdc;
 }
 .mtitle {
   background-color: #333333;
@@ -204,9 +216,13 @@ p{
   height: 120px !important;
   display: block;
 }
-div.el-upload.el-upload--text{
-    width: 120px;
-    height: 120px;
+div.el-upload.el-upload--text {
+  width: 120px;
+  height: 120px;
 }
-
+.text{
+    text-align: right;
+    padding-right: 12px;
+    font-size: 14px
+}
 </style>

@@ -1,6 +1,6 @@
 
 <template>
-  <div id="dynamicList">
+  <div id="aioes">
     <el-row type="flex" justify="space-between" class="dynamicList-title">
       <el-col :span="8">
         <aiologo></aiologo>
@@ -273,51 +273,51 @@ export default {
   }
 };
 </script>
-<style scoped>
-.el-breadcrumb__inner {
+<style>
+#aioes .el-breadcrumb__inner {
   font-size: 18px !important;
 }
-.dynamicList-title {
+#aioes .dynamicList-title {
   border-bottom: dashed 1px #b3c0d1;
   margin-bottom: 10px;
   padding-bottom: 10px;
 }
-.el-table {
+#aioes .el-table {
   margin: 50px auto;
   width: 80%;
 }
-.Img-page {
+#aioes .Img-page {
   margin-left: 114px;
 }
-.textImgType {
+#aioes .textImgType {
   width: 80%;
   height: 25px;
 }
-.dialogImg img {
+#aioes .dialogImg img {
   width: 80px;
 }
-.dynamicForm {
+#aioes .dynamicForm {
   width: 80%;
   margin: 50px auto;
 }
-.el-dialog__body {
+#aioes .el-dialog__body {
   padding: 0;
 }
-.dynamicTitle {
+#aioes .dynamicTitle {
   margin-bottom: 30px;
   font-size: 18px;
   height: 40px;
   line-height: 40px;
   border-bottom: 1px solid #b3c0d1;
 }
-.addTitle {
+#aioes .addTitle {
   margin-left: 20px;
 }
-.aupload {
+#aioes .aupload {
   width: 80%;
   margin: 0 auto;
 }
-.avatar-uploader-icon {
+#aioes .avatar-uploader-icon {
   font-size: 28px;
   color: #8c939d;
   width: 178px;
@@ -325,12 +325,12 @@ export default {
   line-height: 178px;
   text-align: center;
 }
-.avatar {
+#aioes .avatar {
   width: 100px;
   height: 100px;
   display: inline-block;
 }
-.upload-demo {
+#aioes .upload-demo {
   display: flex;
   align-items: flex-end;
 }
@@ -357,7 +357,8 @@ export default {
   height: 178px;
   display: block;
 } */
-div.tip {
-  display: inline-block;
+#aioes .el-table-column--selection.is-leaf:first-child div.cell {
+  display: none;
+  /* border: 1px solid red */
 }
 </style>

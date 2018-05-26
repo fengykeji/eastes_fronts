@@ -26,6 +26,11 @@ import addHouseInfo from  './modules/addHouseInfo'
 import CheckCompanypPayRule from './modules/CheckCompanypPayRule'
 
 
+
+import ModifyHTA from './modules/ModifyHTA'
+
+
+
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -51,6 +56,7 @@ export default new Vuex.Store({
  		projectImg,
  		palnPho,
  		addHouseInfo,
- 		CheckCompanypPayRule
+		CheckCompanypPayRule,
+		ModifyHTA 
   }
 })

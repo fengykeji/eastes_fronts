@@ -102,7 +102,9 @@ import AddNavTwo from '../components/AllInOneManagement/AddNavTwo.vue'
 import AIOPropertyConsultant from '../components/AllInOneManagement/AIOPropertyConsultant.vue'
 import AddPC from '../components/AllInOneManagement/AddPC.vue'
 import ModifyPC from '../components/AllInOneManagement/ModifyPC.vue'
-
+import HouseTypeAppreciation from "../components/AllInOneManagement/HouseTypeAppreciation.vue";
+import addHTA from '../components/AllInOneManagement/AddHTA.vue'
+import modifyHTA from '../components/AllInOneManagement/ModifyHTA.vue'
 Vue.use(Router)
 
 
@@ -443,6 +445,21 @@ export default new Router({
          path:'index/modifyPC',
          name:'modifypc',
          component:ModifyPC
+       },
+       {
+         path:'index/houseTypeAppreciation/:navid',
+         name:'housetypeappreciation',
+         component:HouseTypeAppreciation
+       },
+       {
+         path:'index/addHouseTypeAppreciation/:navid',
+         name:'addhta',
+         component:addHTA
+       },
+       {
+         path:'index/modifyHTA',
+         name:'modifyhta',
+         component:modifyHTA
        }
     ]
   }

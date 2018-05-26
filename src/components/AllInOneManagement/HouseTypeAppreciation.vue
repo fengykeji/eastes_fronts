@@ -1,14 +1,13 @@
-
 <template>
-  <div id="aiopc">
+  <div id="hta">
     <el-row type="flex" justify="space-between" class="dynamicList-title">
       <el-col :span="8">
         <aiologo></aiologo>
       </el-col>
       <el-col :span="8">
         <el-button-group>
-          <el-button type="primary" size="small" @click="addPC">新增</el-button>
-          <el-button type="primary" size="small" @click="modifyPC">修改</el-button>
+          <el-button type="primary" size="small" @click="addHTA">新增</el-button>
+          <el-button type="primary" size="small" @click="modifyHTA">修改</el-button>
           <el-button type="primary" size="small" @click="del">删除</el-button>
         </el-button-group>
       </el-col>
@@ -18,7 +17,11 @@
       </el-table-column>
       <el-table-column prop="sort" label="序号" width="50">
       </el-table-column>
-      <el-table-column prop="name" label="姓名">
+      <el-table-column prop="code" label="编号">
+      </el-table-column>
+      <el-table-column prop="acreage" label="建筑面积(平方米)">
+      </el-table-column>
+      <el-table-column prop="name" label="户型">
       </el-table-column>
     </el-table>
 
@@ -116,7 +119,7 @@ export default {
 
       let id = this.selectedRow.id;
       this.$http
-        .get(this.rooturl + "user/project/delDynatown?id=" + id)
+        .get(this.rooturl + "user/project/delHouseType?id=" + id)
         .then(res => {
           console.log(res);
           this.tableData = this.tableData.filter(ele => {
@@ -131,7 +134,7 @@ export default {
       // console.log('ddddddd')
       // console.log(this.alltablesize)
     },
-    modifyPC() {
+    modifyHTA() {
       if (!this.hasItemSelected) {
         this.$message.error("您还没有选择");
         return;
@@ -140,10 +143,18 @@ export default {
       // let nav_id = this.selectedRow.nav_id
       let name = this.selectedRow.name;
       let sort = this.selectedRow.sort;
-      let img_url = this.selectedRow.img_url;
+      let code = this.selectedRow.code;
+      let acreage = this.selectedRow.acreage;
+      let threed = this.selectedRow.threed_img;
+      let plane = this.selectedRow.plane_img
+      let templet = this.selectedRow.templet_img
+      let building = this.selectedRow.building
+      let plane_status = this.selectedRow.plane_status
+      let templet_status = this.selectedRow.templet_status
+      let threed_status = this.selectedRow.threed_status
       this.$router.push({
-        name: "modifypc",
-        query: { id, name, sort, img_url}
+        name: "modifyhta",
+        query: { id, name, sort, code,acreage,threed,plane,templet,building,plane_status,templet_status,threed_status}
       });
     },
     // customUploadLogo(file) {
@@ -177,7 +188,7 @@ export default {
     // },
     getSnav() {
       this.$http
-        .get(this.rooturl + "user/project/getAioDynatown?nav_id=" + this.$route.params.id)
+        .get(this.rooturl + "user/project/getAioHouseType?nav_id=" + this.$route.params.navid)
         .then(res => {
           console.log(res)
           let result = res.data.data;
@@ -229,6 +240,7 @@ export default {
       }
       this.selectedRow = row;
       this.hasItemSelected = true;
+      this.$store.dispatch('HTAProfileChange',this.selectedRow.desc)
       this.$refs.multipleTable.clearSelection();
       this.$refs.multipleTable.toggleRowSelection(this.selectedRow);
         console.log('aaaaaaaaaaaaaa')
@@ -248,8 +260,8 @@ export default {
     //   }
     //   return isJPG && isLt2M;
     // },
-    addPC() {
-      this.$router.push({ name: "addpc" ,params:{id:this.$route.params.id}});
+    addHTA() {
+      this.$router.push({ name: "addhta" ,params:{id:this.$route.params.navid}});
     },
     change() {
       let sels = this.sels;
@@ -272,50 +284,50 @@ export default {
 };
 </script>
 <style>
-#aiopc .el-breadcrumb__inner {
+#hta .el-breadcrumb__inner {
   font-size: 18px !important;
 }
-#aiopc .dynamicList-title {
+#hta .dynamicList-title {
   border-bottom: dashed 1px #b3c0d1;
   margin-bottom: 10px;
   padding-bottom: 10px;
 }
-#aiopc .el-table {
+#hta .el-table {
   margin: 50px auto;
   width: 80%;
 }
-#aiopc .Img-page {
+#hta .Img-page {
   margin-left: 114px;
 }
-#aiopc .textImgType {
+#hta .textImgType {
   width: 80%;
   height: 25px;
 }
-#aiopc .dialogImg img {
+#hta .dialogImg img {
   width: 80px;
 }
-#aiopc .dynamicForm {
+#hta .dynamicForm {
   width: 80%;
   margin: 50px auto;
 }
-#aiopc .el-dialog__body {
+#hta .el-dialog__body {
   padding: 0;
 }
-#aiopc .dynamicTitle {
+#hta .dynamicTitle {
   margin-bottom: 30px;
   font-size: 18px;
   height: 40px;
   line-height: 40px;
   border-bottom: 1px solid #b3c0d1;
 }
-#aiopc .addTitle {
+#hta .addTitle {
   margin-left: 20px;
 }
-#aiopc .aupload {
+#hta .aupload {
   width: 80%;
   margin: 0 auto;
 }
-#aiopc .avatar-uploader-icon {
+#hta .avatar-uploader-icon {
   font-size: 28px;
   color: #8c939d;
   width: 178px;
@@ -323,12 +335,12 @@ export default {
   line-height: 178px;
   text-align: center;
 }
-#aiopc .avatar {
+#hta .avatar {
   width: 100px;
   height: 100px;
   display: inline-block;
 }
-#aiopc .upload-demo {
+#hta .upload-demo {
   display: flex;
   align-items: flex-end;
 }
@@ -355,7 +367,7 @@ export default {
   height: 178px;
   display: block;
 } */
-#aiopc .el-table-column--selection.is-leaf:first-child div.cell {
+#hta .el-table-column--selection.is-leaf:first-child div.cell {
   display: none;
   /* border: 1px solid red */
 }
