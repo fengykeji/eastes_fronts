@@ -38,6 +38,7 @@
 import rooturl from "../../../static/Rooturl.js";
 import showImgServer from "../../../static/showImgServer.js";
 import qs from "qs";
+import tid from "../../../static/temporary.js"
 
 export default {
   name: "addNav",
@@ -63,7 +64,7 @@ export default {
         sort: this.form.sort,
         pid: 0,
         img_url: this.imageUrl,
-        project_id: 1
+        project_id: tid.id
       };
       this.$http({
         url: this.rooturl + "user/project/addNav",

@@ -65,6 +65,7 @@ import rooturl from "../../../static/Rooturl.js";
 import imgServer from "../../../static/imgServer.js";
 import indexImg from "../../../static/indexImg.js";
 import showImgServer from "../../../static/showImgServer.js";
+import tid from "../../../static/temporary.js"
 import { mapMutations } from "vuex";
 export default {
   name: "dynamicList",
@@ -152,7 +153,7 @@ export default {
     customUploadLogo(file) {
       let fd = new FormData();
       fd.append("img_url", file.file);
-      fd.append("project_id", 1);
+      fd.append("project_id", tid.id);
       this.$http({
         method: "post",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -168,7 +169,7 @@ export default {
     customUploadHome(file) {
       let fd = new FormData();
       fd.append("img_url", file.file);
-      fd.append("project_id", 1);
+      fd.append("project_id", tid.id);
       this.$http({
         method: "post",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
