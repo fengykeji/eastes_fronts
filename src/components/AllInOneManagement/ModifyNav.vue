@@ -66,7 +66,7 @@ export default {
   },
   methods: {
     submit() {
-      if (!(this.imageUrl && this.form.name && this.form.sort)) {
+      if (!( this.form.name && this.form.sort)) {
         this.$message("请填写相应数据");
         return;
       }
@@ -85,6 +85,7 @@ export default {
         data: qs.stringify(data)
       }).then(
         res => {
+          console.log(res)
           // this.$router.push({name:'AIOSetting'})
           this.$router.go(-1);
         },

@@ -7,30 +7,24 @@
         </div>
         <div class="content">
             <el-form ref="form" :model="form" label-width="100px" class="left">
-                <el-form-item label="名字">
-                    <el-input v-model="form.name"></el-input>
+                <el-form-item label="户型名称">
+                    <el-input v-model="form.name" placeholder="如一室一厅一卫"></el-input>
                 </el-form-item>
                 <el-form-item label="设置序号">
                     <el-input v-model="form.sort"></el-input>
                 </el-form-item>
                 <el-form-item label="户型编号">
-                    <el-input v-model="form.code"></el-input>
+                    <el-input v-model="form.code" placeholder="如A户型输入A"></el-input>
                 </el-form-item>
                 <el-form-item label="面积">
                     <el-input v-model="form.acreage"></el-input>
                 </el-form-item>
                 <el-form-item label="所属楼栋">
-                    <el-input v-model="form.belong" placeholder="多个楼栋用逗号隔开"></el-input>
+                    <el-input v-model="form.belong" placeholder="多个楼栋用 - 隔开,如 一栋-二栋"></el-input>
                 </el-form-item>
                 <el-form-item label="户型描述">
                     <el-input type="textarea" placeholder="请输入内容" v-model="form.profile"></el-input>
                 </el-form-item>
-
-
-
-
-
-
 
                    <el-row type="flex" align="middle">
                     <el-col :span="4" class="text">
@@ -77,9 +71,6 @@
                         <el-radio v-model="tstate" :label="0">隐藏</el-radio>
                     </el-col>
                 </el-row>
-
-
-
 
 
 
