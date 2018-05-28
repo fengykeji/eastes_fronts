@@ -16,9 +16,11 @@
     <el-table :data="Data" @selection-change="selsChange" border ref="multipleTable" tooltip-effect="dark" class="apart-table" @select="handleSelected">
       <el-table-column type="selection" reserve-selection='' label="ALL" width="50">
       </el-table-column>
-      <el-table-column prop="sort" label="序号" width="50">
+      <el-table-column prop="index" label="排序" width="50" :formatter="formatter">
       </el-table-column>
       <el-table-column prop="name" label="姓名">
+      </el-table-column>
+      <el-table-column prop="sort" label="序号" width="50">
       </el-table-column>
     </el-table>
 
@@ -108,6 +110,10 @@ export default {
     this.getSnav();
   },
   methods: {
+    formatter(row,column){
+      return row.index + 1
+      // return this.pageSize * (this.pageNum - 1) + 1 + row.index
+    },
     del() {
       if (!this.hasItemSelected) {
         this.$message.error("您还没有选择");
@@ -122,6 +128,9 @@ export default {
           this.tableData = this.tableData.filter(ele => {
             return ele.id !== id;
           });
+          this.tableData.map((ele,index)=>{
+            ele.index = index
+          })
           this.page();
         });
       // console.log('aaa')
@@ -182,6 +191,7 @@ export default {
           console.log(res)
           let result = res.data.data;
           for (let i = 0; i < result.length; i++) {
+            result[i].index = i
             this.tableData.push(result[i]);
           }
           this.page();

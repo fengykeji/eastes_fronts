@@ -44,16 +44,25 @@
     <el-table :data="Data" @selection-change="selsChange" border ref="multipleTable" tooltip-effect="dark" class="apart-table" @select="handleSelected" :row-class-name="foo">
       <el-table-column type="selection" reserve-selection='' label="All" width="50">
       </el-table-column>
-      <el-table-column prop="sort" label="序号" width="50">
+      <el-table-column prop="index" label="排序" width="50" :formatter="formatter">
       </el-table-column>
       <el-table-column prop="name" label="一级栏目名称">
       </el-table-column>
+      <el-table-column prop="sort" label="序号" width="50">
+      </el-table-column>
+      <!-- <el-table-column prop="index" label="排序" width="50">
+      </el-table-column> -->
+      <!-- <el-table-column label="排序" width="50">
+        <template slot-scope="scope">
+          {{scope.$index}}
+        </template>
+      </el-table-column> -->
     </el-table>
 
     <el-pagination background layout="prev, pager, next" :total="tableData.length" :pageSize="pageSize" @current-change="handleCurrentChange" class="Img-page">
     </el-pagination>
     <!-- 查看弹窗 -->
-    <el-dialog title="查看" :visible.sync="previewVisible">
+    <!-- <el-dialog title="查看" :visible.sync="previewVisible">
       <el-form ref="form" :model="ruleFormSee" label-width="100px" size="small" class="dynamicForm">
         <el-form-item label="标题:">
           <el-input placeholder="请输入内容" v-model="ruleFormSee.title">
@@ -82,7 +91,7 @@
         <el-button type="primary" @click="previewVisible = false">预 览</el-button>
         <el-button @click="previewVisible = false">关 闭</el-button>
       </span>
-    </el-dialog>
+    </el-dialog> -->
     <!-- 新增弹窗 -->
 
   </div>
@@ -159,6 +168,10 @@ export default {
       });
   },
   methods: {
+    formatter(row,column){
+      return row.index + 1
+      // return this.pageSize * (this.pageNum - 1) + 1 + row.index
+    },
     foo({row,column,rowIndex,columnIndex}){
       if(row.type !== 1){
         return 'bd'
@@ -209,6 +222,9 @@ export default {
           this.tableData = this.tableData.filter(ele => {
             return ele.id !== id;
           });
+          this.tableData.map((ele,index)=>{
+            ele.index = index
+          })
           this.page();
         });
       // console.log('aaa')
@@ -278,6 +294,7 @@ export default {
         .then(res => {
           let result = res.data.data;
           for (let i = 0; i < result.length; i++) {
+            result[i].index = i
             this.tableData.push(result[i]);
           }
           this.page();
