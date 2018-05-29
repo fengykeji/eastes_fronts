@@ -432,32 +432,32 @@ export default new Router({
          component:AddNavTwo
        },
        {
-         path:'index/propertyconsultant/:id',
+         path:'/index/propertyconsultant/:id',
          name:'propertyconsultant',
          component:AIOPropertyConsultant
        },
        {
-         path:'index/addPC/:id',
+         path:'/index/addPC/:id',
          name:'addpc',
          component:AddPC
        },
        {
-         path:'index/modifyPC',
+         path:'/index/modifyPC',
          name:'modifypc',
          component:ModifyPC
        },
        {
-         path:'index/houseTypeAppreciation/:navid',
+         path:'/index/houseTypeAppreciation/:navid',
          name:'housetypeappreciation',
          component:HouseTypeAppreciation
        },
        {
-         path:'index/addHouseTypeAppreciation/:navid',
+         path:'/index/addHouseTypeAppreciation/:navid',
          name:'addhta',
          component:addHTA
        },
        {
-         path:'index/modifyHTA',
+         path:'/index/modifyHTA',
          name:'modifyhta',
          component:modifyHTA
        }

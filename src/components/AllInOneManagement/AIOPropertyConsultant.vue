@@ -86,7 +86,7 @@ export default {
       indexUrl: "",
       Data: [],
       tableData: [],
-      pageSize: 5,
+      pageSize: 10,
       alltablesize: [],
       previewVisible: false,
       addDynamicVisible: false,

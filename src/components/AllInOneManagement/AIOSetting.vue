@@ -122,7 +122,7 @@ export default {
       indexUrl: "",
       Data: [],
       tableData: [],
-      pageSize: 5,
+      pageSize: 10,
       alltablesize: [],
       previewVisible: false,
       addDynamicVisible: false,
@@ -145,7 +145,7 @@ export default {
   created() {
     this.getFnav();
     this.$http
-      .get(this.rooturl + "user/project/getIndexImg?project_id=" + 1)
+      .get(this.rooturl + "user/project/getIndexImg?project_id=" + tid.id)
       .then(res => {
         let logo = res.data.data.filter(ele => {
           return ele.name === "Logo";
