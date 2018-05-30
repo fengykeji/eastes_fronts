@@ -16,7 +16,7 @@
                 <!-- <el-row type="flex" align="middle" v-if="type !== 2"> -->
                 <el-row type="flex" align="middle">
                     <el-col :span="4" class="text">
-                        <span>添加楼栋分布图片</span>
+                        <span class="sl">添加楼栋分布图</span>
                     </el-col>
                     <el-col :span="20"> 
                     <el-upload class="avatar-uploader"  :action="rooturl + 'user/project/upload'" :show-file-list="false" name="img_url" :http-request="customUpload">
@@ -226,5 +226,8 @@ div.el-upload.el-upload--text {
     text-align: right;
     padding-right: 12px;
     font-size: 14px
+}
+.sl{
+  font-size: 12px;
 }
 </style>

@@ -16,22 +16,35 @@
         </el-button-group>
       </el-col>
     </el-row>
-      
+
     <el-row class="aupload" type="flex" align="middle">
       <el-col :span="4">
-        <img v-if="logoUrl" :src="logoUrl" class="avatar">
+        <!-- <img v-if="logoUrl" :src="homeLogoUrl" class="avatar"> -->
+        <img  :src="homeLogoUrl" class="avatar">
         <!-- <i v-else class="el-icon-plus avatar-uploader-icon"></i> -->
       </el-col>
       <el-col :span="12">
-        <el-upload ref="newupload" class="upload-demo" :data="project" :action="imgServer" name="img_url" :show-file-list="false" :http-request="customUploadLogo">
-          <el-button size="small" type="primary">点击上传LOGO</el-button>
+        <el-upload ref="newupload" class="upload-demo" :data="project" :action="imgServer" name="img_url" :show-file-list="false" :http-request="customUploadIndexLogo">
+          <el-button size="small" type="primary">点击上传首页LOGO</el-button>
           <!-- <div slot="tip" class="el-upload__tip tip">只能上传jpg/png文件，且不超过500kb</div> -->
         </el-upload>
       </el-col>
     </el-row>
     <el-row class="aupload" type="flex" align="middle">
       <el-col :span="4">
-        <img v-if="indexUrl" :src="indexUrl" class="avatar">
+        <img  :src="houseTypeLogoUrl" class="avatar">
+        <!-- <i v-else class="el-icon-plus avatar-uploader-icon"></i> -->
+      </el-col>
+      <el-col :span="12">
+        <el-upload ref="newupload" class="upload-demo" :data="project" :action="imgServer" name="img_url" :show-file-list="false" :http-request="customUploadHouseTypeLogo">
+          <el-button size="small" type="primary">点击上传户型LOGO</el-button>
+          <!-- <div slot="tip" class="el-upload__tip tip">只能上传jpg/png文件，且不超过500kb</div> -->
+        </el-upload>
+      </el-col>
+    </el-row>
+    <el-row class="aupload" type="flex" align="middle">
+      <el-col :span="4">
+        <img  :src="indexUrl" class="avatar">
         <!-- <i v-else class="el-icon-plus avatar-uploader-icon"></i> -->
       </el-col>
       <el-col :span="12">
@@ -102,7 +115,7 @@ import rooturl from "../../../static/Rooturl.js";
 import imgServer from "../../../static/imgServer.js";
 import indexImg from "../../../static/indexImg.js";
 import showImgServer from "../../../static/showImgServer.js";
-import tid from "../../../static/temporary.js"
+import tid from "../../../static/temporary.js";
 import { mapMutations } from "vuex";
 export default {
   name: "dynamicList",
@@ -118,7 +131,8 @@ export default {
       rooturl: rooturl.rooturl,
       imgServer: imgServer.imgServer,
       indexImg: indexImg.indexImg,
-      logoUrl: "",
+      homeLogoUrl: "",
+      houseTypeLogoUrl:'',
       indexUrl: "",
       Data: [],
       tableData: [],
@@ -147,15 +161,35 @@ export default {
     this.$http
       .get(this.rooturl + "user/project/getIndexImg?project_id=" + tid.id)
       .then(res => {
-        let logo = res.data.data.filter(ele => {
-          return ele.name === "Logo";
+        let homeLogo = res.data.data.filter(ele => {
+          return ele.name === "indexLogo";
         });
-        if (logo.length) {
-          logo = logo[0].value;
-          this.logoUrl = this.rooturl + logo;
-        }else{
-          this.logoUrl = ''
+        if (homeLogo.length) {
+          homeLogo = homeLogo[0].value;
+          this.homeLogoUrl = this.rooturl + homeLogo;
+        } else {
+          this.homeLogoUrl = "";
         }
+        let houseTypeLogo = res.data.data.filter(ele => {
+          return ele.name === "houseTypeLogo";
+        });
+        if (houseTypeLogo.length) {
+          houseTypeLogo = houseTypeLogo[0].value;
+          this.houseTypeLogoUrl = this.rooturl + houseTypeLogo;
+        } else {
+          this.houseTypeLogoUrl = "";
+        }
+
+  
+        // let logo = res.data.data.filter(ele => {
+        //   return ele.name === "Logo";
+        // });
+        // if (logo.length) {
+        //   logo = logo[0].value;
+        //   this.logoUrl = this.rooturl + logo;
+        // }else{
+        //   this.logoUrl = ''
+        // }
         let index = res.data.data.filter(ele => {
           return ele.name === "index";
         });
@@ -168,13 +202,13 @@ export default {
       });
   },
   methods: {
-    formatter(row,column){
-      return row.index + 1
+    formatter(row, column) {
+      return row.index + 1;
       // return this.pageSize * (this.pageNum - 1) + 1 + row.index
     },
-    foo({row,column,rowIndex,columnIndex}){
-      if(row.type !== 1){
-        return 'bd'
+    foo({ row, column, rowIndex, columnIndex }) {
+      if (row.type !== 1) {
+        return "bd";
       }
     },
     // toHtml(row,column){
@@ -182,49 +216,51 @@ export default {
     //     return this.$createElement('b',row[column.property])
     //   }else{
     //     return row[column.property]
-    //   } 
+    //   }
     // },
-    edit(){
+    edit() {
       if (!this.hasItemSelected) {
         this.$message.error("您还没有选择");
         return;
       }
-      let id = this.selectedRow.id
-      if(this.selectedRow.type===3){
-        this.$router.push({name:'propertyconsultant',params:{id}})
+      let id = this.selectedRow.id;
+      if (this.selectedRow.type === 3) {
+        this.$router.push({ name: "propertyconsultant", params: { id } });
         // return
-      }else if(this.selectedRow.type === 4){
-        this.$router.push({name:'housetypeappreciation',params:{navid:id}})
-      }else if(this.selectedRow.type === 2){
-        this.$message.error('抱歉，该条目不允许添加二级菜单')
-      }else{
-      this.$router.push({name:'editsecondary',params:{id}})
+      } else if (this.selectedRow.type === 4) {
+        this.$router.push({
+          name: "housetypeappreciation",
+          params: { navid: id }
+        });
+      } else if (this.selectedRow.type === 2) {
+        this.$message.error("抱歉，该条目不允许添加二级菜单");
+      } else {
+        this.$router.push({ name: "editsecondary", params: { id } });
       }
-
     },
     del() {
       if (!this.hasItemSelected) {
         this.$message.error("您还没有选择");
         return;
       }
-      if(this.selectedRow.type !== 1 ){
+      if (this.selectedRow.type !== 1) {
         this.$message.error("该条目无法被删除");
-        return
+        return;
       }
       let id = this.selectedRow.id;
       this.$http
         .get(this.rooturl + "user/project/delNav?id=" + id)
         .then(res => {
-          if(res.data.code === 400){
-            this.$message.error(res.data.msg)
-            return
+          if (res.data.code === 400) {
+            this.$message.error(res.data.msg);
+            return;
           }
           this.tableData = this.tableData.filter(ele => {
             return ele.id !== id;
           });
-          this.tableData.map((ele,index)=>{
-            ele.index = index
-          })
+          this.tableData.map((ele, index) => {
+            ele.index = index;
+          });
           this.page();
         });
       // console.log('aaa')
@@ -243,26 +279,42 @@ export default {
       let name = this.selectedRow.name;
       let sort = this.selectedRow.sort;
       let img_url = this.selectedRow.img_url;
-      let type = this.selectedRow.type
+      let type = this.selectedRow.type;
       this.$router.push({
         name: "modifyNav",
-        query: { id, name, sort, img_url,type }
+        query: { id, name, sort, img_url, type }
       });
     },
-    customUploadLogo(file) {
+    customUploadIndexLogo(file) {
       let fd = new FormData();
       fd.append("img_url", file.file);
       fd.append("project_id", tid.id);
       this.$http({
         method: "post",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        url: this.rooturl + "user/project/uploadLogo",
+        url: this.rooturl + "user/project/uploadIndexLogo",
         // url:
         //   "http://192.168.0.154/hs_agent/public/index.php/user/project/uploadLogo",
         data: fd
       }).then(res => {
         console.log(res);
-        this.logoUrl = this.rooturl + res.data.data.img_url;
+        this.homeLogoUrl = this.rooturl + res.data.data.img_url;
+      });
+    },
+    customUploadHouseTypeLogo(file) {
+      let fd = new FormData();
+      fd.append("img_url", file.file);
+      fd.append("project_id", tid.id);
+      this.$http({
+        method: "post",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        url: this.rooturl + "user/project/uploadHouseTypeLogo",
+        // url:
+        //   "http://192.168.0.154/hs_agent/public/index.php/user/project/uploadLogo",
+        data: fd
+      }).then(res => {
+        console.log(res);
+        this.houseTypeLogoUrl = this.rooturl + res.data.data.img_url;
       });
     },
     customUploadHome(file) {
@@ -294,7 +346,7 @@ export default {
         .then(res => {
           let result = res.data.data;
           for (let i = 0; i < result.length; i++) {
-            result[i].index = i
+            result[i].index = i;
             this.tableData.push(result[i]);
           }
           this.page();
@@ -342,7 +394,7 @@ export default {
       this.hasItemSelected = true;
       this.$refs.multipleTable.clearSelection();
       this.$refs.multipleTable.toggleRowSelection(this.selectedRow);
-      console.log(this.selectedRow)
+      console.log(this.selectedRow);
     },
     // 验证图片格式大小
     // beforeImgUpload(file) {
@@ -381,7 +433,6 @@ export default {
 };
 </script>
 <style>
-
 #aiosetting .el-breadcrumb__inner {
   font-size: 18px !important;
 }
@@ -455,8 +506,8 @@ export default {
   display: none;
   /* border: 1px solid red */
 }
-#aiosetting .bd{
-  font-weight: bold !important
+#aiosetting .bd {
+  font-weight: bold !important;
 }
 /* .avatar-uploader .el-upload {
   border: 1px dashed #d9d9d9;
@@ -484,9 +535,9 @@ export default {
 div.tip {
   display: inline-block;
 }
-.bar{
+.bar {
   display: flex;
   justify-content: center;
-  align-items: center
+  align-items: center;
 }
 </style>
