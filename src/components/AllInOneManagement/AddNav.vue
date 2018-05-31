@@ -17,11 +17,15 @@
                     <el-col :span="4" class="text">
                         <span>添加图片</span>
                     </el-col>
-                    <el-col :span="20">
+                    <el-col :span="8">
                         <el-upload class="avatar-uploader" :action="rooturl + '/user/project/upload'" :show-file-list="false" name="img_url" :http-request="customUpload">
                             <img v-if="showUrl" :src="showUrl" class="avatar">
                             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                         </el-upload>
+                    </el-col>
+                    <el-col :span="12" >
+                      <el-radio v-model="radio" :label="1">满屏展示</el-radio>
+                      <el-radio v-model="radio" :label="2">区域展示</el-radio>
                     </el-col>
                 </el-row>
             </el-form>
@@ -50,7 +54,8 @@ export default {
       form: {
         name: "",
         sort: ""
-      }
+      },
+      radio:1
     };
   },
   methods: {
@@ -64,7 +69,8 @@ export default {
         sort: this.form.sort,
         pid: 0,
         img_url: this.imageUrl,
-        project_id: tid.id
+        project_id: tid.id,
+        show_status:this.radio
       };
       this.$http({
         url: this.rooturl + "user/project/addNav",
