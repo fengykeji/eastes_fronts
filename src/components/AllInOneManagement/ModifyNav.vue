@@ -62,6 +62,7 @@ export default {
     };
   },
   created() {
+    this.radio = this.$route.query.radio
     this.form.name = this.$route.query.name;
     this.form.sort = parseInt(this.$route.query.sort);
     this.imageUrl = this.$route.query.img_url ? this.$route.query.img_url : "";

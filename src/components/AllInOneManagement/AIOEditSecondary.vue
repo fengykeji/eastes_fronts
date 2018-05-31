@@ -149,6 +149,7 @@ export default {
         this.$message.error("您还没有选择");
         return;
       }
+      let radio = this.selectedRow.show_status
       let id = this.selectedRow.id;
       let name = this.selectedRow.name;
       let sort = this.selectedRow.sort;
@@ -156,7 +157,7 @@ export default {
       let type = this.selectedRow.type
       this.$router.push({
         name: "modifyNav",
-        query: { id, name, sort, img_url,type }
+        query: { id, name, sort, img_url,type,radio }
       });
     },
     customUploadLogo(file) {

@@ -280,9 +280,10 @@ export default {
       let sort = this.selectedRow.sort;
       let img_url = this.selectedRow.img_url;
       let type = this.selectedRow.type;
+      let radio = this.selectedRow.show_status
       this.$router.push({
         name: "modifyNav",
-        query: { id, name, sort, img_url, type }
+        query: { id, name, sort, img_url, type,radio }
       });
     },
     customUploadIndexLogo(file) {
